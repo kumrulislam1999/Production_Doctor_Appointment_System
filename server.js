@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const path = require("path");
 
 /* ===== Dotenv Config ===== */
 dotenv.config();
@@ -23,8 +24,15 @@ app.use(morgan("dev"));
 app.use("/api/v1/user", require("./routes/userRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
 app.use("/api/v1/doctor", require("./routes/doctorRoutes"));
+
+// Static files
+app.use(express.static(path.join(__dirname, "./client/build")));
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
+
 /* ===== Port ===== */
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 1999;
 
 /* ===== Listening Port ===== */
 app.listen(PORT, () => {
